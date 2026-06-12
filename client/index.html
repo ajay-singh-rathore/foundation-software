@@ -19,6 +19,10 @@
     <title>Foundation Software — Tree Tracker</title>
   </head>
   <body>
+    <script>
+      // Apply saved theme before first paint to avoid a light/dark flash
+      document.documentElement.dataset.theme = localStorage.getItem('theme') || 'light'
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

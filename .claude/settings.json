@@ -26,7 +26,8 @@
       "PowerShell(git add fly.toml)",
       "PowerShell(git push)",
       "PowerShell(node scripts/make-icons.mjs)",
-      "PowerShell(Get-Content \"C:\\\\Users\\\\ajays\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\e--Foundation\\\\ce62ac80-ae1e-43a0-a86a-8236df6cc183\\\\tasks\\\\b16zm0fou.output\" -Tail 8; \"===\"; $h = \\(Invoke-WebRequest -UseBasicParsing https://foundation-software.fly.dev/ -TimeoutSec 60\\).Content; if \\($h -match 'apple-touch-icon'\\) { \"mobile fixes LIVE\" } else { \"old version still serving\" }; \\(Invoke-WebRequest -UseBasicParsing https://foundation-software.fly.dev/icon-192.png -TimeoutSec 30\\).StatusCode)"
+      "PowerShell(Get-Content \"C:\\\\Users\\\\ajays\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\e--Foundation\\\\ce62ac80-ae1e-43a0-a86a-8236df6cc183\\\\tasks\\\\b16zm0fou.output\" -Tail 8; \"===\"; $h = \\(Invoke-WebRequest -UseBasicParsing https://foundation-software.fly.dev/ -TimeoutSec 60\\).Content; if \\($h -match 'apple-touch-icon'\\) { \"mobile fixes LIVE\" } else { \"old version still serving\" }; \\(Invoke-WebRequest -UseBasicParsing https://foundation-software.fly.dev/icon-192.png -TimeoutSec 30\\).StatusCode)",
+      "PowerShell($h = \\(Invoke-WebRequest -UseBasicParsing https://foundation-software.fly.dev/ -TimeoutSec 60\\).Content; if \\($h -match 'only light'\\) { \"dark-mode fix LIVE\" } else { \"old version still serving\" })"
     ]
   }
 }

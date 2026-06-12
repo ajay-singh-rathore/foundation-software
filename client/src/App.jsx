@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Routes, Route, NavLink, Link, useLocation } from 'react-router-dom'
 import Dashboard from './pages/Dashboard.jsx'
 import TreesList from './pages/TreesList.jsx'
@@ -8,6 +9,13 @@ import MapView from './pages/MapView.jsx'
 
 export default function App() {
   const { pathname } = useLocation()
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
   return (
     <div className="app">
       <header className="topbar">
@@ -18,6 +26,13 @@ export default function App() {
             <span>Tree Plantation Tracker</span>
           </div>
         </Link>
+        <button
+          className="theme-toggle"
+          onClick={() => setTheme(t => (t === 'light' ? 'dark' : 'light'))}
+          title={theme === 'light' ? 'Dark mode' : 'Light mode'}
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
       </header>
 
       <main className="content">
