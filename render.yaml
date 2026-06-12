@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: foundation-software
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+    disk:
+      name: foundation-data
+      mountPath: /var/data
+      sizeGB: 1

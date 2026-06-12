@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(git init)",
+      "PowerShell(git branch -M main)",
+      "PowerShell(npm install --no-fund --no-audit 2>$null)",
+      "PowerShell(npm run build)",
+      "PowerShell(npm run seed)",
+      "PowerShell(npm start)",
+      "PowerShell(Start-Sleep -Seconds 2; \\(Invoke-WebRequest -UseBasicParsing http://localhost:4000/api/stats\\).Content; \"---\"; \\(Invoke-WebRequest -UseBasicParsing \"http://localhost:4000/api/trees?status=healthy\"\\).Content.Substring\\(0,300\\); \"---\"; \\(Invoke-WebRequest -UseBasicParsing http://localhost:4000/tree/FDN-0001\\).StatusCode)",
+      "PowerShell([IO.File]::WriteAllBytes\\(\"$env:TEMP\\\\test-tree.png\", [Convert]::FromBase64String\\('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='\\)\\); curl.exe -s -F \"photo=@$env:TEMP\\\\test-tree.png\" -F \"species=UploadTest\" -F \"lat=26.9\" -F \"lng=75.7\" http://localhost:4000/api/trees)",
+      "PowerShell($p = \\(Invoke-WebRequest -UseBasicParsing http://localhost:4000/uploads/1781300362241-a82777c7.png\\).StatusCode; \"photo serve: $p\"; curl.exe -s -X DELETE http://localhost:4000/api/trees/FDN-0013; Remove-Item \"$env:TEMP\\\\test-tree.png\" -Confirm:$false)",
+      "PowerShell(git add -A)"
+    ]
+  }
+}

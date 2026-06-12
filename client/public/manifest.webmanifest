@@ -1,0 +1,12 @@
+{
+  "name": "Foundation Software — Tree Tracker",
+  "short_name": "Foundation",
+  "description": "Track every planted tree — photo, GPS location and growth progress.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f7f0",
+  "theme_color": "#166534",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
