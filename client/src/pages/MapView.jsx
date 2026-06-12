@@ -22,7 +22,7 @@ export default function MapView() {
         ))}
       </div>
       <div className="card pad0">
-        <LeafletMap markers={markers} height="calc(100vh - 280px)" />
+        <LeafletMap markers={markers} className="map-full" />
       </div>
     </div>
   )

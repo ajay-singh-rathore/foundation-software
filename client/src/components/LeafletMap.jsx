@@ -3,7 +3,7 @@ import L from 'leaflet'
 import { statusInfo } from '../api.js'
 
 // Renders an OpenStreetMap with one circle-marker per tree, colored by status.
-export default function LeafletMap({ markers = [], height = 320, zoom = 16, interactive = true }) {
+export default function LeafletMap({ markers = [], height, className = '', zoom = 16, interactive = true }) {
   const divRef = useRef(null)
   const mapRef = useRef(null)
   const layerRef = useRef(null)
@@ -55,5 +55,11 @@ export default function LeafletMap({ markers = [], height = 320, zoom = 16, inte
     }
   }, [markers, zoom])
 
-  return <div ref={divRef} className="leaflet-box" style={{ height }} />
+  return (
+    <div
+      ref={divRef}
+      className={('leaflet-box ' + className).trim()}
+      style={height != null ? { height } : undefined}
+    />
+  )
 }

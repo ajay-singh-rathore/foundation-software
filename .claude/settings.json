@@ -10,7 +10,22 @@
       "PowerShell(Start-Sleep -Seconds 2; \\(Invoke-WebRequest -UseBasicParsing http://localhost:4000/api/stats\\).Content; \"---\"; \\(Invoke-WebRequest -UseBasicParsing \"http://localhost:4000/api/trees?status=healthy\"\\).Content.Substring\\(0,300\\); \"---\"; \\(Invoke-WebRequest -UseBasicParsing http://localhost:4000/tree/FDN-0001\\).StatusCode)",
       "PowerShell([IO.File]::WriteAllBytes\\(\"$env:TEMP\\\\test-tree.png\", [Convert]::FromBase64String\\('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='\\)\\); curl.exe -s -F \"photo=@$env:TEMP\\\\test-tree.png\" -F \"species=UploadTest\" -F \"lat=26.9\" -F \"lng=75.7\" http://localhost:4000/api/trees)",
       "PowerShell($p = \\(Invoke-WebRequest -UseBasicParsing http://localhost:4000/uploads/1781300362241-a82777c7.png\\).StatusCode; \"photo serve: $p\"; curl.exe -s -X DELETE http://localhost:4000/api/trees/FDN-0013; Remove-Item \"$env:TEMP\\\\test-tree.png\" -Confirm:$false)",
-      "PowerShell(git add -A)"
+      "PowerShell(git add -A)",
+      "PowerShell(gh repo create foundation-software --public --source . --remote origin --push --description \"Foundation Software - Tree Plantation Tracker. Track every tree: photo, GPS, QR code, growth timeline.\")",
+      "PowerShell(foreach \\($c in 'render','flyctl','fly','railway','vercel','netlify','docker'\\) { $cmd = Get-Command $c -ErrorAction SilentlyContinue; if \\($cmd\\) { \"$c : FOUND\" } else { \"$c : not installed\" } })",
+      "PowerShell(flyctl auth whoami)",
+      "PowerShell(vercel whoami)",
+      "PowerShell(\"---\")",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "PowerShell(echo '{}' | powershell.exe -NoProfile -Command \"[System.Media.SystemSounds]::Exclamation.Play\\(\\); Start-Sleep -Milliseconds 600\"; \"exit: $LASTEXITCODE\")",
+      "PowerShell($s = Get-Content C:\\\\Users\\\\ajays\\\\.claude\\\\settings.json -Raw | ConvertFrom-Json; $s.hooks.PermissionRequest[0].hooks[0].command; $s.hooks.Notification[0].hooks[0].command)",
+      "PowerShell(flyctl apps create foundation-software --org personal)",
+      "PowerShell(flyctl volumes create foundation_data --region bom --size 1 -a foundation-software --yes)",
+      "PowerShell(flyctl deploy --remote-only --ha=false -a foundation-software)",
+      "PowerShell(git add fly.toml)",
+      "PowerShell(git push)",
+      "PowerShell(node scripts/make-icons.mjs)"
     ]
   }
 }
