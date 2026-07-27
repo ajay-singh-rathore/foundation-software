@@ -46,12 +46,36 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_updates_tree ON updates(tree_id, created_at DESC);
+
+  CREATE TABLE IF NOT EXISTS sites (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    name         TEXT NOT NULL,
+    location     TEXT,
+    lat          REAL,
+    lng          REAL,
+    target_count INTEGER,
+    planted_date TEXT,
+    notes        TEXT,
+    created_at   TEXT NOT NULL DEFAULT (datetime('now'))
+  );
 `)
 
-export function nextTreeId() {
+// Migration: older databases have a trees table without site_id
+const treeCols = db.prepare(`PRAGMA table_info(trees)`).all()
+if (!treeCols.some(c => c.name === 'site_id')) {
+  db.exec(`ALTER TABLE trees ADD COLUMN site_id INTEGER REFERENCES sites(id)`)
+}
+db.exec(`CREATE INDEX IF NOT EXISTS idx_trees_site ON trees(site_id)`)
+
+export function maxTreeNumber() {
   const row = db
     .prepare(`SELECT MAX(CAST(SUBSTR(id, 5) AS INTEGER)) AS n FROM trees WHERE id LIKE 'FDN-%'`)
     .get()
-  const n = (row?.n || 0) + 1
-  return 'FDN-' + String(n).padStart(4, '0')
+  return row?.n || 0
+}
+
+export const treeIdFromNumber = (n) => 'FDN-' + String(n).padStart(4, '0')
+
+export function nextTreeId() {
+  return treeIdFromNumber(maxTreeNumber() + 1)
 }

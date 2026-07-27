@@ -237,12 +237,12 @@ code {
 /* ---------- forms ---------- */
 .form { display: flex; flex-direction: column; gap: 14px; }
 .form label { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 600; }
-.form input, .form textarea {
+.form input, .form textarea, .form select {
   padding: 12px 14px; border-radius: 11px; border: 1.5px solid var(--border);
   font-family: inherit; font-size: 16px; background: var(--input-bg); color: var(--text);
   width: 100%; min-width: 0;
 }
-.form input:focus, .form textarea:focus { outline: 2px solid var(--green-600); border-color: transparent; }
+.form input:focus, .form textarea:focus, .form select:focus { outline: 2px solid var(--green-600); border-color: transparent; }
 
 .photo-input {
   display: block; border: 2px dashed var(--green-600); border-radius: var(--radius);
@@ -258,6 +258,39 @@ code {
 .gps-field { display: flex; flex-direction: column; gap: 8px; }
 .gps-field .row { gap: 8px; }
 .gps-field input { flex: 1; min-width: 0; }
+
+/* ---------- sites ---------- */
+.site-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: var(--text); }
+.progress {
+  height: 9px; border-radius: 999px; background: var(--green-soft); overflow: hidden;
+}
+.progress > div {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--green-600), #4ade80);
+  transition: width 0.4s ease;
+}
+
+/* ---------- QR tag sheet ---------- */
+.tag-sheet {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
+}
+.tag {
+  background: #fff; color: #0f2e1c; border: 1.5px dashed #9ca3af; border-radius: 8px;
+  padding: 10px 8px; text-align: center;
+  break-inside: avoid; page-break-inside: avoid;
+}
+.tag img { width: 100%; max-width: 150px; display: block; margin: 0 auto; }
+.tag-id { font-weight: 800; font-size: 17px; letter-spacing: 0.5px; margin-top: 4px; }
+.tag-species { font-size: 12px; }
+.tag-org { font-size: 10px; color: #6b7280; margin-top: 3px; }
+
+@media print {
+  .topbar, .bottomnav, .fab, .no-print { display: none !important; }
+  .content { padding: 0; }
+  body, .app { background: #fff; }
+  .tag-sheet { grid-template-columns: repeat(3, 1fr); gap: 6mm; }
+  .page { gap: 0; }
+}
 
 /* ---------- map ---------- */
 .leaflet-box { width: 100%; border-radius: inherit; }

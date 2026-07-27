@@ -19,7 +19,12 @@ export default function TreeDetail() {
   useEffect(() => {
     if (!tree) return
     const url = window.location.origin + '/tree/' + tree.id
-    QRCode.toDataURL(url, { width: 480, margin: 2, color: { dark: '#14532d' } }).then(setQr)
+    QRCode.toDataURL(url, {
+      width: 480,
+      margin: 2,
+      errorCorrectionLevel: 'H', // survives ~30% damage on weather-worn tags
+      color: { dark: '#14532d' }
+    }).then(setQr)
   }, [tree])
 
   if (error) return <div className="page"><div className="error card">{error}</div></div>
@@ -48,6 +53,12 @@ export default function TreeDetail() {
         <div><span className="muted small">Height · ऊँचाई</span><strong>{tree.height_cm ? `${tree.height_cm} cm` : '—'}</strong></div>
         <div><span className="muted small">Planted on · लगाया गया</span><strong>{fmtDate(tree.planted_date)}</strong></div>
         <div><span className="muted small">Planted by · किसने लगाया</span><strong>{tree.planted_by || '—'}</strong></div>
+        {tree.site_name && (
+          <div>
+            <span className="muted small">Site · जगह</span>
+            <strong><Link to={`/site/${tree.site_id}`}>🏞️ {tree.site_name}</Link></strong>
+          </div>
+        )}
         <div><span className="muted small">Latitude</span><strong>{tree.lat ?? '—'}</strong></div>
         <div><span className="muted small">Longitude</span><strong>{tree.lng ?? '—'}</strong></div>
       </div>

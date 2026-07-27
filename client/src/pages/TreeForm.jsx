@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { postForm } from '../api.js'
+import { getJSON, postForm } from '../api.js'
 import PhotoInput from '../components/PhotoInput.jsx'
 import GpsField from '../components/GpsField.jsx'
 
@@ -8,8 +8,11 @@ export default function TreeForm() {
   const navigate = useNavigate()
   const [photo, setPhoto] = useState(null)
   const [gps, setGps] = useState({ lat: '', lng: '' })
+  const [sites, setSites] = useState([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
+
+  useEffect(() => { getJSON('/api/sites').then(setSites).catch(() => {}) }, [])
 
   async function submit(e) {
     e.preventDefault()
@@ -37,6 +40,14 @@ export default function TreeForm() {
         <label>Local name · स्थानीय नाम
           <input name="local_name" placeholder="e.g. नीम" />
         </label>
+        {sites.length > 0 && (
+          <label>Site · जगह
+            <select name="site_id" defaultValue="">
+              <option value="">— No site / अलग पेड़ —</option>
+              {sites.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </label>
+        )}
         <div className="row gap">
           <label className="grow">Planted date · तारीख
             <input name="planted_date" type="date" />

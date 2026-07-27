@@ -8,13 +8,15 @@ export default function TreesList() {
   const [trees, setTrees] = useState(null)
   const search = params.get('search') || ''
   const status = params.get('status') || ''
+  const site = params.get('site') || ''
 
   useEffect(() => {
     const q = new URLSearchParams()
     if (search) q.set('search', search)
     if (status) q.set('status', status)
+    if (site) q.set('site', site)
     getJSON('/api/trees?' + q.toString()).then(setTrees).catch(() => setTrees([]))
-  }, [search, status])
+  }, [search, status, site])
 
   function setParam(key, value) {
     const next = new URLSearchParams(params)
@@ -25,6 +27,13 @@ export default function TreesList() {
   return (
     <div className="page">
       <h2>All Trees · सभी पेड़ {trees ? `(${trees.length})` : ''}</h2>
+      {site && trees?.length > 0 && (
+        <div className="card small" style={{ padding: '10px 14px' }}>
+          🏞️ Site filter: <strong>{trees[0].site_name || `#${site}`}</strong>
+          {' · '}
+          <a href="#" onClick={(e) => { e.preventDefault(); setParam('site', '') }}>Clear</a>
+        </div>
+      )}
       <input
         className="search"
         placeholder="🔍 Search by ID, species, planter…"

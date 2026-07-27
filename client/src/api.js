@@ -12,6 +12,13 @@ export const getJSON = (path) => fetch(path).then(handle)
 export const postForm = (path, formData) =>
   fetch(path, { method: 'POST', body: formData }).then(handle)
 
+export const postJSON = (path, data) =>
+  fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(handle)
+
 export const STATUS = {
   healthy:         { label: 'Healthy', hindi: 'स्वस्थ',        color: '#16a34a', bg: '#dcfce7', emoji: '🌿' },
   needs_attention: { label: 'Needs Care', hindi: 'देखभाल चाहिए', color: '#d97706', bg: '#fef3c7', emoji: '⚠️' },
