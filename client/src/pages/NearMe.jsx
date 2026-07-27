@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getJSON, statusInfo, treeLocation } from '../api.js'
 import StatusBadge from '../components/StatusBadge.jsx'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 export default function NearMe() {
@@ -33,11 +34,12 @@ export default function NearMe() {
 
   return (
     <div className="page">
-      <h2>📍 {t('nav_near')}</h2>
+      <h2>{t('nav_near')}</h2>
       <div className="card" style={{ textAlign: 'center' }}>
         <p className="muted small">{t('near_hint')}</p>
         <button className="btn btn-primary" onClick={() => locate()} disabled={state === 'locating'}>
-          {state === 'locating' ? '📡 ' + t('locating') : state === 'done' ? '🔄 ' + t('refresh_location') : '📍 ' + t('find_near')}
+          <Icon name={state === 'done' ? 'refresh' : 'crosshair'} size={16} />
+          {state === 'locating' ? ' ' + t('locating') : state === 'done' ? ' ' + t('refresh_location') : ' ' + t('find_near')}
         </button>
         <div className="chips" style={{ justifyContent: 'center', marginTop: 10 }}>
           {[50, 150, 500].map(r => (
@@ -62,17 +64,17 @@ export default function NearMe() {
       {trees.map((tr, i) => (
         <Link to={`/tree/${tr.id}`} key={tr.id} className="card near-row">
           <div className="near-rank" style={{ background: statusInfo(tr.status).color }}>
-            {i === 0 ? '🎯' : i + 1}
+            {i + 1}
           </div>
           <div className="grow">
             <div className="row spread">
               <strong>{tr.species} <code>{tr.id}</code></strong>
               <StatusBadge status={tr.status} />
             </div>
-            <div className="muted small">
-              {treeLocation(tr) ? `🧱 ${treeLocation(tr)} · ` : ''}
-              {tr.site_name ? `🏞️ ${tr.site_name} · ` : ''}
-              📏 <strong>{tr.distance_m} m {t('away')}</strong>
+            <div className="muted small meta-line">
+              {treeLocation(tr) && <span className="meta-item"><Icon name="rows" size={13} /> {treeLocation(tr)}</span>}
+              {tr.site_name && <span className="meta-item"><Icon name="mountain" size={13} /> {tr.site_name}</span>}
+              <span className="meta-item"><Icon name="navigation" size={13} /> <strong>{tr.distance_m} m {t('away')}</strong></span>
             </div>
           </div>
         </Link>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getJSON, postForm } from '../api.js'
 import PhotoInput from '../components/PhotoInput.jsx'
 import GpsField from '../components/GpsField.jsx'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 export default function TreeForm() {
@@ -32,7 +33,7 @@ export default function TreeForm() {
 
   return (
     <div className="page">
-      <h2>🌱 {t('add_new_tree')}</h2>
+      <h2>{t('add_new_tree')}</h2>
       <form onSubmit={submit} className="form card">
         <PhotoInput onChange={setPhoto} />
 
@@ -71,7 +72,7 @@ export default function TreeForm() {
 
         {error && <div className="error">{error}</div>}
         <button className="btn btn-primary" disabled={busy}>
-          {busy ? t('saving') : '✅ ' + t('save_tree')}
+          <Icon name="check" size={16} /> {busy ? t('saving') : t('save_tree')}
         </button>
       </form>
     </div>

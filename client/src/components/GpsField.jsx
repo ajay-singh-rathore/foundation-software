@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Icon from './Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 // Latitude/longitude inputs with a one-tap "use my location" button.
@@ -29,7 +30,7 @@ export default function GpsField({ lat, lng, onChange }) {
           onChange={(e) => onChange({ lat, lng: e.target.value })} />
       </div>
       <button type="button" className="btn btn-outline" onClick={locate} disabled={busy}>
-        {busy ? '📡 ' + t('locating') : '📍 ' + t('use_my_location')}
+        <Icon name="crosshair" size={16} /> {busy ? t('locating') : t('use_my_location')}
       </button>
       {error && <div className="error small">{error}</div>}
     </div>

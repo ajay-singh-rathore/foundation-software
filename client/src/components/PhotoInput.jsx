@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Icon from './Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 // Shrinks phone photos (~4MB) to app-sized JPEGs (~300KB) before upload,
@@ -48,7 +49,12 @@ export default function PhotoInput({ onChange }) {
     <label className="photo-input">
       {preview
         ? <img src={preview} alt="Selected" />
-        : <div className="photo-input-empty">📷<span>{t('photo_tap')}</span></div>}
+        : (
+          <div className="photo-input-empty">
+            <Icon name="camera" size={30} strokeWidth={1.7} />
+            <span>{t('photo_tap')}</span>
+          </div>
+        )}
       <input type="file" accept="image/*" capture="environment" onChange={handleFile} hidden />
     </label>
   )

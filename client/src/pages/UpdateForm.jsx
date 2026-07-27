@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { postForm, STATUS } from '../api.js'
 import PhotoInput from '../components/PhotoInput.jsx'
 import GpsField from '../components/GpsField.jsx'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 export default function UpdateForm() {
@@ -32,7 +33,7 @@ export default function UpdateForm() {
 
   return (
     <div className="page">
-      <h2>📝 {t('add_progress_update')} — <code>{id}</code></h2>
+      <h2>{t('add_progress_update')} — <code>{id}</code></h2>
       <form onSubmit={submit} className="form card">
         <PhotoInput onChange={setPhoto} />
 
@@ -44,7 +45,9 @@ export default function UpdateForm() {
               className={'chip' + (status === key ? ' active' : '')}
               style={status === key ? { background: s.color, borderColor: s.color } : {}}
               onClick={() => setStatus(key)}
-            >{s.emoji} {t('status_' + key)}</button>
+            >
+              <i className="dot" style={{ background: status === key ? '#fff' : s.color }} /> {t('status_' + key)}
+            </button>
           ))}
         </div>
 
@@ -73,7 +76,7 @@ export default function UpdateForm() {
 
         {error && <div className="error">{error}</div>}
         <button className="btn btn-primary" disabled={busy}>
-          {busy ? t('saving') : '✅ ' + t('save_update')}
+          <Icon name="check" size={16} /> {busy ? t('saving') : t('save_update')}
         </button>
         <Link to={'/tree/' + id} className="btn btn-outline">{t('cancel')}</Link>
       </form>

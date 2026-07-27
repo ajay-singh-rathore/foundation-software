@@ -88,7 +88,8 @@ img { max-width: 100%; }
   background: rgba(255, 255, 255, 0.13);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff; cursor: pointer;
-  font-size: 17px; line-height: 1; padding: 8px 10px; border-radius: 11px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  font-size: 17px; line-height: 1; padding: 9px 10px; border-radius: 11px;
   transition: background 0.15s;
 }
 .theme-toggle:active { transform: scale(0.94); }
@@ -116,6 +117,16 @@ code {
 .error { color: #dc2626; font-size: 14px; }
 .empty { text-align: center; color: var(--muted); padding: 30px 18px; }
 a { color: var(--green-ink); }
+
+/* ---------- icons & dots ---------- */
+.icon { vertical-align: -0.18em; flex-shrink: 0; }
+.dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  vertical-align: 0.03em; flex-shrink: 0;
+}
+.meta-item { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.meta-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h2 .icon { margin-right: 4px; }
 
 /* ---------- cards ---------- */
 .card {
@@ -146,19 +157,20 @@ a { color: var(--green-ink); }
 /* ---------- dashboard stats ---------- */
 .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .stat-card {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
   text-decoration: none; color: var(--text);
-  border-left: 4px solid; padding: 13px 15px;
+  border-left: 4px solid; padding: 14px 16px;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .stat-card:active { transform: scale(0.98); }
-.stat-card strong { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
-.stat-emoji { font-size: 17px; }
+.stat-card strong { font-family: var(--font-display); font-size: 27px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.stat-label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
 
 .activity { display: flex; gap: 12px; text-decoration: none; color: var(--text); margin-top: 10px; }
 .activity-photo {
   width: 52px; height: 52px; border-radius: 12px; overflow: hidden; flex-shrink: 0;
-  background: var(--green-soft); display: flex; align-items: center; justify-content: center; font-size: 22px;
+  background: var(--green-soft); color: var(--green-ink);
+  display: flex; align-items: center; justify-content: center;
 }
 .activity-photo img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -206,8 +218,8 @@ a { color: var(--green-ink); }
   font-size: 10.5px; font-weight: 600; letter-spacing: 0.01em;
 }
 .bottomnav a span {
-  font-size: 19px; line-height: 1;
-  padding: 4px 14px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1; padding: 5px 15px; border-radius: 999px;
   transition: background 0.15s;
 }
 .bottomnav a.active { color: var(--green-ink); }
@@ -215,7 +227,7 @@ a { color: var(--green-ink); }
 
 /* ---------- badges & chips ---------- */
 .badge {
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 5px;
   font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap;
 }
 .badge-lg { font-size: 13px; padding: 5px 12px; }
@@ -223,6 +235,7 @@ a { color: var(--green-ink); }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; }
 .chip {
   border: 1.5px solid var(--border); background: var(--card); color: var(--text);
+  display: inline-flex; align-items: center; gap: 6px;
   padding: 7px 14px; border-radius: 999px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
   transition: transform 0.1s;
 }
@@ -248,9 +261,9 @@ a { color: var(--green-ink); }
 .tree-card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .photo-placeholder {
   width: 100%; height: 100%; min-height: 104px; display: flex; align-items: center; justify-content: center;
-  font-size: 34px; background: var(--green-soft);
+  background: var(--green-soft); color: var(--green-ink); opacity: 0.85;
 }
-.photo-placeholder.big { min-height: 230px; font-size: 64px; }
+.photo-placeholder.big { min-height: 230px; }
 .tree-card-body { padding: 11px 13px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .tree-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .tree-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -301,8 +314,8 @@ a { color: var(--green-ink); }
 }
 .photo-input img { width: 100%; max-height: 260px; object-fit: cover; display: block; }
 .photo-input-empty {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 32px 16px; font-size: 32px; color: var(--green-ink);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 32px 16px; color: var(--green-ink);
 }
 .photo-input-empty span { font-size: 13.5px; font-weight: 600; }
 

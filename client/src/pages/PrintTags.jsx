@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import QRCode from 'qrcode'
 import { getJSON } from '../api.js'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 const CHUNK = 300 // tags per print batch, keeps the page fast
@@ -45,12 +46,12 @@ export default function PrintTags() {
   return (
     <div className="page">
       <div className="no-print">
-        <h2>🏷️ {t('qr_tags')} — {site?.name || ''} ({trees.length})</h2>
+        <h2>{t('qr_tags')} — {site?.name || ''} ({trees.length})</h2>
         <div className="card">
           <p className="muted small">{t('tag_print_hint')}</p>
           <div className="row gap" style={{ flexWrap: 'wrap' }}>
             <button className="btn btn-primary" onClick={() => window.print()} disabled={rendering}>
-              🖨️ {t('print')} {rendering ? `(${t('preparing')})` : `${batch + 1}/${batches || 1}`}
+              <Icon name="printer" size={16} /> {t('print')} {rendering ? `(${t('preparing')})` : `${batch + 1}/${batches || 1}`}
             </button>
             {batches > 1 && (
               <>
@@ -79,7 +80,7 @@ export default function PrintTags() {
                 Block {tr.block}{tr.row_no ? ` · Row ${tr.row_no}` : ''}{tr.pos ? ` · #${tr.pos}` : ''}
               </div>
             )}
-            <div className="tag-org">🌲 Aranya · briklabs.in</div>
+            <div className="tag-org">Aranya · aranya.briklabs.in</div>
           </div>
         ))}
       </div>

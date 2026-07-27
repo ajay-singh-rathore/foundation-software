@@ -31,7 +31,7 @@ export default function TreesList() {
       <h2>{t('all_trees')} {trees ? `(${trees.length})` : ''}</h2>
       {site && trees?.length > 0 && (
         <div className="card small" style={{ padding: '10px 14px' }}>
-          🏞️ {t('site_filter')}: <strong>{trees[0].site_name || `#${site}`}</strong>
+          {t('site_filter')}: <strong>{trees[0].site_name || `#${site}`}</strong>
           {' · '}
           <a href="#" onClick={(e) => { e.preventDefault(); setParam('site', '') }}>{t('clear')}</a>
         </div>
@@ -51,7 +51,7 @@ export default function TreesList() {
             style={status === key ? { background: s.color, borderColor: s.color } : {}}
             onClick={() => setParam('status', key)}
           >
-            {s.emoji} {t('status_' + key)}
+            <i className="dot" style={{ background: status === key ? '#fff' : s.color }} /> {t('status_' + key)}
           </button>
         ))}
       </div>

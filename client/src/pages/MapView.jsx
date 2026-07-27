@@ -17,7 +17,7 @@ export default function MapView() {
 
   return (
     <div className="page">
-      <h2>🗺️ {t('plantation_map')} · {located.length} {t('trees_located')}</h2>
+      <h2>{t('plantation_map')} · {located.length} {t('trees_located')}</h2>
       <div className="legend card">
         {Object.entries(STATUS).map(([key, s]) => (
           <span key={key}><i style={{ background: s.color }} /> {t('status_' + key)}</span>

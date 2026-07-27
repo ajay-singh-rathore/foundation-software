@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getJSON, postJSON } from '../api.js'
+import { getJSON, postJSON, STATUS } from '../api.js'
 import GpsField from '../components/GpsField.jsx'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 export default function Sites() {
@@ -36,12 +37,18 @@ export default function Sites() {
     setBusy(false)
   }
 
+  const statusDot = (key, count) => (
+    <span className="meta-item" key={key}>
+      <i className="dot" style={{ background: STATUS[key].color }} /> {count || 0}
+    </span>
+  )
+
   return (
     <div className="page">
       <div className="row spread">
-        <h2>🏞️ {t('sites_title')} {sites ? `(${sites.length})` : ''}</h2>
+        <h2>{t('sites_title')} {sites ? `(${sites.length})` : ''}</h2>
         <button className="btn btn-primary" onClick={() => setShowForm(s => !s)}>
-          {showForm ? t('cancel') : '➕ ' + t('new_site')}
+          <Icon name={showForm ? 'x' : 'plus'} size={16} /> {showForm ? t('cancel') : t('new_site')}
         </button>
       </div>
 
@@ -68,7 +75,7 @@ export default function Sites() {
           </label>
           {error && <div className="error">{error}</div>}
           <button className="btn btn-primary" disabled={busy}>
-            {busy ? t('saving') : '✅ ' + t('create_site')}
+            <Icon name="check" size={16} /> {busy ? t('saving') : t('create_site')}
           </button>
         </form>
       )}
@@ -86,14 +93,16 @@ export default function Sites() {
           <Link to={`/site/${s.id}`} key={s.id} className="card site-card">
             <div className="row spread">
               <strong>{s.name}</strong>
-              <code>{registered}{s.target_count ? ` / ${s.target_count}` : ''} 🌳</code>
+              <code>{registered}{s.target_count ? ` / ${s.target_count}` : ''}</code>
             </div>
-            {s.location && <div className="muted small">📍 {s.location}</div>}
+            {s.location && (
+              <div className="muted small meta-item"><Icon name="map-pin" size={13} /> {s.location}</div>
+            )}
             <div className="progress"><div style={{ width: pct + '%' }} /></div>
             <div className="row spread small muted">
               <span>{pct}% {t('registered')}</span>
-              <span>
-                🌿 {s.healthy || 0} · ⚠️ {s.needs_attention || 0} · 🍂 {s.sick || 0} · 🪵 {s.dead || 0}
+              <span className="meta-line">
+                {Object.keys(STATUS).map(key => statusDot(key, s[key]))}
               </span>
             </div>
           </Link>

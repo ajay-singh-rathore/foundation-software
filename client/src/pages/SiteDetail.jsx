@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getJSON, postJSON, STATUS, fmtDate } from '../api.js'
 import LeafletMap from '../components/LeafletMap.jsx'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 export default function SiteDetail() {
@@ -34,7 +35,7 @@ export default function SiteDetail() {
         block: fd.get('block'),
         per_row: fd.get('per_row')
       })
-      setResult(`✅ ${r.created} ${t('trees_word')}: ${r.firstId} → ${r.lastId}`)
+      setResult(`${r.created} ${t('trees_word')}: ${r.firstId} → ${r.lastId}`)
       e.target.reset()
       setShowBulk(false)
       load()
@@ -57,7 +58,7 @@ export default function SiteDetail() {
     <div className="page">
       <div className="hero card">
         <div>
-          <h1>🏞️ {site.name}</h1>
+          <h1>{site.name}</h1>
           <p>{site.location || t('sites_title')} · {fmtDate(site.planted_date)}</p>
         </div>
         <div className="hero-rate">
@@ -66,23 +67,30 @@ export default function SiteDetail() {
         </div>
       </div>
 
-      {result && <div className="card" style={{ borderColor: '#16a34a' }}>{result}</div>}
+      {result && (
+        <div className="card" style={{ borderColor: '#16a34a' }}>
+          <span className="meta-item"><Icon name="check" size={15} /> {result}</span>
+        </div>
+      )}
 
       <div className="stat-grid">
         {Object.entries(STATUS).map(([key, s]) => (
           <Link key={key} to={`/trees?site=${site.id}&status=${key}`} className="stat-card card" style={{ borderColor: s.color }}>
-            <span className="stat-emoji">{s.emoji}</span>
+            <span className="stat-label muted small">
+              <i className="dot" style={{ background: s.color }} /> {t('status_' + key)}
+            </span>
             <strong style={{ color: s.color }}>{site[key] || 0}</strong>
-            <span className="muted small">{t('status_' + key)}</span>
           </Link>
         ))}
       </div>
 
       <div className="row gap">
         <button className="btn btn-primary grow" onClick={() => setShowBulk(s => !s)}>
-          {showBulk ? t('cancel') : '📦 ' + t('bulk_register')}
+          <Icon name={showBulk ? 'x' : 'package'} size={16} /> {showBulk ? t('cancel') : t('bulk_register')}
         </button>
-        <Link to={`/site/${site.id}/print`} className="btn btn-outline grow">🏷️ {t('print_qr_tags')}</Link>
+        <Link to={`/site/${site.id}/print`} className="btn btn-outline grow">
+          <Icon name="qr-code" size={16} /> {t('print_qr_tags')}
+        </Link>
       </div>
 
       {showBulk && (
@@ -118,13 +126,15 @@ export default function SiteDetail() {
           <p className="muted small">{t('block_hint')}</p>
           {error && <div className="error">{error}</div>}
           <button className="btn btn-primary" disabled={busy}>
-            {busy ? t('registering') : '✅ ' + t('register_all')}
+            <Icon name="check" size={16} /> {busy ? t('registering') : t('register_all')}
           </button>
         </form>
       )}
 
       <div className="row gap">
-        <Link to={`/trees?site=${site.id}`} className="btn btn-outline grow">🌳 {t('view_all_trees')} ({registered})</Link>
+        <Link to={`/trees?site=${site.id}`} className="btn btn-outline grow">
+          <Icon name="tree" size={16} /> {t('view_all_trees')} ({registered})
+        </Link>
       </div>
 
       {markers.length > 0 && (
@@ -132,8 +142,8 @@ export default function SiteDetail() {
           <LeafletMap markers={markers} height={300} />
         </div>
       )}
-      <div className="muted small">
-        📍 {located.length} / {registered} — {t('have_gps')}
+      <div className="muted small meta-item">
+        <Icon name="map-pin" size={13} /> {located.length} / {registered} — {t('have_gps')}
       </div>
 
       {site.notes && <div className="card"><span className="muted small">{t('notes')}</span><p>{site.notes}</p></div>}

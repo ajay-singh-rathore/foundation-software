@@ -4,6 +4,7 @@ import QRCode from 'qrcode'
 import { getJSON, fmtDate, fmtDateTime, statusInfo, treeLocation } from '../api.js'
 import StatusBadge from '../components/StatusBadge.jsx'
 import LeafletMap from '../components/LeafletMap.jsx'
+import Icon from '../components/Icons.jsx'
 import { useLang } from '../i18n.jsx'
 
 export default function TreeDetail() {
@@ -37,7 +38,7 @@ export default function TreeDetail() {
       <div className="detail-photo">
         {tree.photo
           ? <img src={tree.photo} alt={tree.species} />
-          : <div className="photo-placeholder big">🌱</div>}
+          : <div className="photo-placeholder big"><Icon name="image" size={48} strokeWidth={1.4} /></div>}
         <div className="detail-photo-overlay">
           <h1>{tree.species} {tree.local_name ? `· ${tree.local_name}` : ''}</h1>
           <code className="tree-id">{tree.id}</code>
@@ -45,7 +46,9 @@ export default function TreeDetail() {
       </div>
 
       <div className="row gap">
-        <Link to={`/tree/${tree.id}/update`} className="btn btn-primary grow">📝 {t('add_progress_update')}</Link>
+        <Link to={`/tree/${tree.id}/update`} className="btn btn-primary grow">
+          <Icon name="edit" size={16} /> {t('add_progress_update')}
+        </Link>
       </div>
 
       <div className="card info-grid">
@@ -56,13 +59,13 @@ export default function TreeDetail() {
         {tree.site_name && (
           <div>
             <span className="muted small">{t('site')}</span>
-            <strong><Link to={`/site/${tree.site_id}`}>🏞️ {tree.site_name}</Link></strong>
+            <strong><Link to={`/site/${tree.site_id}`}>{tree.site_name}</Link></strong>
           </div>
         )}
         {treeLocation(tree) && (
           <div>
             <span className="muted small">{t('position')}</span>
-            <strong>🧱 {treeLocation(tree)}</strong>
+            <strong>{treeLocation(tree)}</strong>
           </div>
         )}
         <div><span className="muted small">{t('latitude')}</span><strong>{tree.lat ?? '—'}</strong></div>
@@ -78,7 +81,7 @@ export default function TreeDetail() {
             className="btn btn-outline mlink"
             href={`https://www.google.com/maps?q=${tree.lat},${tree.lng}`}
             target="_blank" rel="noreferrer"
-          >🧭 {t('navigate_gmaps')}</a>
+          ><Icon name="navigation" size={16} /> {t('navigate_gmaps')}</a>
         </div>
       )}
 
@@ -88,7 +91,9 @@ export default function TreeDetail() {
           <div>
             <strong>{t('tree_qr')}</strong>
             <p className="muted small">{t('qr_hint')}</p>
-            <a className="btn btn-outline" href={qr} download={`${tree.id}-qr.png`}>⬇️ {t('download_qr')}</a>
+            <a className="btn btn-outline" href={qr} download={`${tree.id}-qr.png`}>
+              <Icon name="download" size={16} /> {t('download_qr')}
+            </a>
           </div>
         </div>
       )}
@@ -109,9 +114,9 @@ export default function TreeDetail() {
                 </div>
                 {u.photo && <img className="timeline-photo" src={u.photo} alt="" loading="lazy" />}
                 {u.note && <p>{u.note}</p>}
-                <div className="muted small">
-                  {u.height_cm ? `📏 ${u.height_cm} cm · ` : ''}
-                  {u.updated_by ? `👤 ${u.updated_by}` : ''}
+                <div className="muted small meta-line">
+                  {u.height_cm ? <span className="meta-item"><Icon name="ruler" size={13} /> {u.height_cm} cm</span> : null}
+                  {u.updated_by ? <span className="meta-item"><Icon name="user" size={13} /> {u.updated_by}</span> : null}
                 </div>
               </div>
             </div>
@@ -126,7 +131,7 @@ export default function TreeDetail() {
           await fetch('/api/trees/' + tree.id, { method: 'DELETE' })
           navigate('/trees')
         }}
-      >🗑️ {t('delete_tree')}</button>
+      ><Icon name="trash" size={16} /> {t('delete_tree')}</button>
     </div>
   )
 }

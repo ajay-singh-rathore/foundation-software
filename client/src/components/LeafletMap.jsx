@@ -38,8 +38,9 @@ export default function LeafletMap({ markers = [], height, className = '', zoom 
       })
       if (m.label) {
         marker.bindPopup(
-          `<div style="font-family:Poppins,sans-serif">
-             <strong>${m.label}</strong><br/>${s.emoji} ${s.label}<br/>
+          `<div style="font-family:Inter,sans-serif">
+             <strong>${m.label}</strong><br/>
+             <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${s.color};margin-right:4px"></span>${s.label}<br/>
              ${m.id ? `<a href="/tree/${m.id}">Open ${m.id} →</a>` : ''}
            </div>`
         )

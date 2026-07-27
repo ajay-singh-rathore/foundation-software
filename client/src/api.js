@@ -20,10 +20,10 @@ export const postJSON = (path, data) =>
   }).then(handle)
 
 export const STATUS = {
-  healthy:         { label: 'Healthy', hindi: 'स्वस्थ',        color: '#16a34a', bg: '#dcfce7', emoji: '🌿' },
-  needs_attention: { label: 'Needs Care', hindi: 'देखभाल चाहिए', color: '#d97706', bg: '#fef3c7', emoji: '⚠️' },
-  sick:            { label: 'Sick', hindi: 'बीमार',            color: '#dc2626', bg: '#fee2e2', emoji: '🍂' },
-  dead:            { label: 'Dead', hindi: 'सूख गया',          color: '#52525b', bg: '#e4e4e7', emoji: '🪵' }
+  healthy:         { label: 'Healthy',    color: '#16a34a', bg: '#dcfce7' },
+  needs_attention: { label: 'Needs Care', color: '#d97706', bg: '#fef3c7' },
+  sick:            { label: 'Sick',       color: '#dc2626', bg: '#fee2e2' },
+  dead:            { label: 'Dead',       color: '#52525b', bg: '#e4e4e7' }
 }
 
 export const statusInfo = (s) => STATUS[s] || STATUS.healthy
