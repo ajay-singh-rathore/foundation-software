@@ -26,7 +26,7 @@ export default function App() {
         <Link to="/" className="brand">
           <img src="/icon.svg" alt="" width="34" height="34" />
           <div>
-            <strong>Foundation Software</strong>
+            <strong>Aranya · अरण्य</strong>
             <span>Tree Plantation Tracker</span>
           </div>
         </Link>

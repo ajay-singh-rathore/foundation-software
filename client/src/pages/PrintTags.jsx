@@ -81,7 +81,7 @@ export default function PrintTags() {
                 Block {t.block}{t.row_no ? ` · Row ${t.row_no}` : ''}{t.pos ? ` · #${t.pos}` : ''}
               </div>
             )}
-            <div className="tag-org">🌳 Foundation Software</div>
+            <div className="tag-org">🌲 Aranya · briklabs.in</div>
           </div>
         ))}
       </div>

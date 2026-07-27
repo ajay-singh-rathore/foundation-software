@@ -1,7 +1,7 @@
 {
-  "name": "foundation-software",
-  "version": "1.0.0",
-  "description": "Foundation Software — Tree Plantation Tracker (Module 1)",
+  "name": "aranya",
+  "version": "2.0.0",
+  "description": "Aranya — Tree Plantation Tracker (Foundation Software, Module 1)",
   "type": "module",
   "scripts": {
     "dev:server": "node server/index.js",

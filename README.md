@@ -1,6 +1,8 @@
-# 🌳 Foundation Software — Tree Plantation Tracker
+# 🌲 Aranya (अरण्य) — Tree Plantation Tracker
 
-**Module 1: Tree Tracker** — track every planted tree with its photo, GPS location, health status and full growth timeline. Built for field workers on mobile.
+**Aranya** ("forest" in Sanskrit) tracks every planted tree with its photo, GPS location, health status and full growth timeline. Built for field workers on mobile. Live at **https://aranya.briklabs.in**.
+
+Part of the Foundation Software suite (module 1).
 
 ## Features
 

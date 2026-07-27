@@ -1,6 +1,6 @@
 {
-  "name": "Foundation Software — Tree Tracker",
-  "short_name": "Foundation",
+  "name": "Aranya — Tree Plantation Tracker",
+  "short_name": "Aranya",
   "description": "Track every planted tree — photo, GPS location and growth progress.",
   "start_url": "/",
   "display": "standalone",
