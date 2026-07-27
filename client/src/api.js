@@ -28,6 +28,15 @@ export const STATUS = {
 
 export const statusInfo = (s) => STATUS[s] || STATUS.healthy
 
+// "A · Row 3 · #5" — human label for a tree's block/row position
+export function treeLocation(t) {
+  if (!t?.block) return null
+  let s = 'Block ' + t.block
+  if (t.row_no) s += ' · Row ' + t.row_no
+  if (t.pos) s += ' · #' + t.pos
+  return s
+}
+
 export function fmtDate(d) {
   if (!d) return '—'
   const date = new Date(d.includes('T') || d.includes(' ') ? d.replace(' ', 'T') + 'Z' : d)

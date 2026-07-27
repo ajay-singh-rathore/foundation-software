@@ -76,6 +76,11 @@ export default function PrintTags() {
             <img src={t.qr} alt={t.id} />
             <div className="tag-id">{t.id}</div>
             <div className="tag-species">{t.species}{t.local_name ? ` · ${t.local_name}` : ''}</div>
+            {t.block && (
+              <div className="tag-loc">
+                Block {t.block}{t.row_no ? ` · Row ${t.row_no}` : ''}{t.pos ? ` · #${t.pos}` : ''}
+              </div>
+            )}
             <div className="tag-org">🌳 Foundation Software</div>
           </div>
         ))}

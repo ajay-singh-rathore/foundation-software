@@ -58,6 +58,13 @@ export default function UpdateForm() {
         <label>Location (verifies the visit) · लोकेशन</label>
         <GpsField lat={gps.lat} lng={gps.lng} onChange={setGps} />
 
+        <label>Block / Row / Position (optional — pehli baar set karo)</label>
+        <div className="row gap">
+          <input name="block" placeholder="Block A" maxLength="8" />
+          <input name="row_no" type="number" min="1" placeholder="Row 3" />
+          <input name="pos" type="number" min="1" placeholder="#12" />
+        </div>
+
         <label>Note · टिप्पणी
           <textarea name="note" rows="3" placeholder="Watered, added compost, pest check…" />
         </label>

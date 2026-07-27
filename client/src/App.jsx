@@ -7,6 +7,7 @@ import TreeForm from './pages/TreeForm.jsx'
 import UpdateForm from './pages/UpdateForm.jsx'
 import MapView from './pages/MapView.jsx'
 import Sites from './pages/Sites.jsx'
+import NearMe from './pages/NearMe.jsx'
 import SiteDetail from './pages/SiteDetail.jsx'
 import PrintTags from './pages/PrintTags.jsx'
 
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="/tree/:id" element={<TreeDetail />} />
           <Route path="/tree/:id/update" element={<UpdateForm />} />
           <Route path="/map" element={<MapView />} />
+          <Route path="/near" element={<NearMe />} />
           <Route path="/sites" element={<Sites />} />
           <Route path="/site/:id" element={<SiteDetail />} />
           <Route path="/site/:id/print" element={<PrintTags />} />
@@ -59,6 +61,7 @@ export default function App() {
       <nav className="bottomnav">
         <NavLink to="/" end><span>🏠</span>Home</NavLink>
         <NavLink to="/sites"><span>🏞️</span>Sites</NavLink>
+        <NavLink to="/near"><span>📍</span>Near Me</NavLink>
         <NavLink to="/trees"><span>🌳</span>Trees</NavLink>
         <NavLink to="/map"><span>🗺️</span>Map</NavLink>
       </nav>

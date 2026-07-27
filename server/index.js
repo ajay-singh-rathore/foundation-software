@@ -55,9 +55,9 @@ app.get('/api/trees', (req, res) => {
   let sql = 'SELECT t.*, s.name AS site_name FROM trees t LEFT JOIN sites s ON s.id = t.site_id WHERE 1=1'
   const params = []
   if (search) {
-    sql += ' AND (t.id LIKE ? OR t.species LIKE ? OR t.local_name LIKE ? OR t.planted_by LIKE ?)'
+    sql += ' AND (t.id LIKE ? OR t.species LIKE ? OR t.local_name LIKE ? OR t.planted_by LIKE ? OR t.block = ?)'
     const like = `%${search}%`
-    params.push(like, like, like, like)
+    params.push(like, like, like, like, search.trim().toUpperCase())
   }
   if (status && VALID_STATUS.includes(status)) {
     sql += ' AND t.status = ?'
@@ -80,6 +80,39 @@ app.get('/api/trees/:id', (req, res) => {
     .prepare('SELECT * FROM updates WHERE tree_id = ? ORDER BY created_at DESC, id DESC')
     .all(req.params.id)
   res.json({ ...tree, updates })
+})
+
+// ---------- near me ----------
+
+const distanceMeters = (aLat, aLng, bLat, bLng) => {
+  const R = 6371000
+  const toR = (d) => (d * Math.PI) / 180
+  const dLat = toR(bLat - aLat)
+  const dLng = toR(bLng - aLng)
+  const s = Math.sin(dLat / 2) ** 2 +
+    Math.cos(toR(aLat)) * Math.cos(toR(bLat)) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(s))
+}
+
+app.get('/api/near', (req, res) => {
+  const lat = Number(req.query.lat)
+  const lng = Number(req.query.lng)
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    return res.status(400).json({ error: 'lat and lng are required' })
+  }
+  const radius = Math.min(Number(req.query.radius) || 150, 2000)
+  const limit = Math.min(Number(req.query.limit) || 25, 100)
+  const located = db.prepare(`
+    SELECT t.*, s.name AS site_name FROM trees t
+    LEFT JOIN sites s ON s.id = t.site_id
+    WHERE t.lat IS NOT NULL AND t.lng IS NOT NULL
+  `).all()
+  const near = located
+    .map(t => ({ ...t, distance_m: Math.round(distanceMeters(lat, lng, t.lat, t.lng)) }))
+    .filter(t => t.distance_m <= radius)
+    .sort((a, b) => a.distance_m - b.distance_m)
+    .slice(0, limit)
+  res.json(near)
 })
 
 // ---------- sites ----------
@@ -125,17 +158,21 @@ app.post('/api/sites/:id/bulk-trees', (req, res) => {
   if (!b.species) return res.status(400).json({ error: 'Species is required' })
 
   const insert = db.prepare(`
-    INSERT INTO trees (id, species, local_name, planted_date, planted_by, site_id, lat, lng)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO trees (id, species, local_name, planted_date, planted_by, site_id, lat, lng, block, row_no, pos)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `)
+  const block = (b.block || '').trim().toUpperCase() || null
+  const perRow = Math.floor(Number(b.per_row)) || 0
   const start = maxTreeNumber() + 1
   db.exec('BEGIN')
   try {
     for (let i = 0; i < count; i++) {
+      const rowNo = block && perRow ? Math.floor(i / perRow) + 1 : null
+      const pos = block && perRow ? (i % perRow) + 1 : null
       insert.run(
         treeIdFromNumber(start + i), b.species, b.local_name || null,
         b.planted_date || null, b.planted_by || null, site.id,
-        num(b.lat), num(b.lng)
+        num(b.lat), num(b.lng), block, rowNo, pos
       )
     }
     db.exec('COMMIT')
@@ -156,11 +193,12 @@ app.post('/api/trees', upload.single('photo'), (req, res) => {
   const status = VALID_STATUS.includes(b.status) ? b.status : 'healthy'
   const id = nextTreeId()
   db.prepare(`
-    INSERT INTO trees (id, species, local_name, planted_date, planted_by, site_id, lat, lng, status, height_cm, notes, photo)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO trees (id, species, local_name, planted_date, planted_by, site_id, lat, lng, status, height_cm, notes, photo, block, row_no, pos)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     id, b.species, b.local_name || null, b.planted_date || null, b.planted_by || null,
-    num(b.site_id), num(b.lat), num(b.lng), status, num(b.height_cm), b.notes || null, photoUrl(req.file)
+    num(b.site_id), num(b.lat), num(b.lng), status, num(b.height_cm), b.notes || null, photoUrl(req.file),
+    (b.block || '').trim().toUpperCase() || null, num(b.row_no), num(b.pos)
   )
   res.status(201).json(db.prepare('SELECT * FROM trees WHERE id = ?').get(id))
 })
@@ -182,9 +220,17 @@ app.post('/api/trees/:id/updates', upload.single('photo'), (req, res) => {
       status = COALESCE(?, status),
       height_cm = COALESCE(?, height_cm),
       photo = COALESCE(?, photo),
+      lat = COALESCE(?, lat),
+      lng = COALESCE(?, lng),
+      block = COALESCE(?, block),
+      row_no = COALESCE(?, row_no),
+      pos = COALESCE(?, pos),
       updated_at = datetime('now')
     WHERE id = ?
-  `).run(status, num(b.height_cm), photo, tree.id)
+  `).run(
+    status, num(b.height_cm), photo, num(b.lat), num(b.lng),
+    (b.block || '').trim().toUpperCase() || null, num(b.row_no), num(b.pos), tree.id
+  )
 
   res.status(201).json(db.prepare('SELECT * FROM trees WHERE id = ?').get(tree.id))
 })

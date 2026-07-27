@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import StatusBadge from './StatusBadge.jsx'
-import { fmtDate } from '../api.js'
+import { fmtDate, treeLocation } from '../api.js'
 
 export default function TreeCard({ tree }) {
   return (
@@ -20,7 +20,9 @@ export default function TreeCard({ tree }) {
           <StatusBadge status={tree.status} />
           {tree.height_cm ? <span className="muted">📏 {tree.height_cm} cm</span> : null}
         </div>
-        <div className="muted small">🌱 Planted: {fmtDate(tree.planted_date)}</div>
+        <div className="muted small">
+          {treeLocation(tree) ? `🧱 ${treeLocation(tree)} · ` : ''}🌱 {fmtDate(tree.planted_date)}
+        </div>
       </div>
     </Link>
   )

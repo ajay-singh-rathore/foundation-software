@@ -28,7 +28,9 @@ export default function SiteDetail() {
         species: fd.get('species'),
         local_name: fd.get('local_name'),
         planted_date: fd.get('planted_date'),
-        planted_by: fd.get('planted_by')
+        planted_by: fd.get('planted_by'),
+        block: fd.get('block'),
+        per_row: fd.get('per_row')
       })
       setResult(`✅ ${r.created} trees registered: ${r.firstId} → ${r.lastId}`)
       e.target.reset()
@@ -106,6 +108,18 @@ export default function SiteDetail() {
           <label>Planted by · किसने लगाए
             <input name="planted_by" placeholder="Team / volunteer name" />
           </label>
+          <div className="row gap">
+            <label className="grow">Block naam · ब्लॉक (optional)
+              <input name="block" placeholder="A" maxLength="8" />
+            </label>
+            <label className="grow">Ek row mein kitne ped? (optional)
+              <input name="per_row" type="number" min="1" placeholder="25" />
+            </label>
+          </div>
+          <p className="muted small">
+            Block + per-row doge toh har ped ko अपने आप Row/Position milegi (jaise Block A · Row 3 · #12) —
+            bina GPS ke bhi ped dhundhna easy. Alag block ke liye alag batch chalao.
+          </p>
           {error && <div className="error">{error}</div>}
           <button className="btn btn-primary" disabled={busy}>
             {busy ? 'Registering…' : '✅ Register All Trees'}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import QRCode from 'qrcode'
-import { getJSON, fmtDate, fmtDateTime, statusInfo } from '../api.js'
+import { getJSON, fmtDate, fmtDateTime, statusInfo, treeLocation } from '../api.js'
 import StatusBadge from '../components/StatusBadge.jsx'
 import LeafletMap from '../components/LeafletMap.jsx'
 
@@ -57,6 +57,12 @@ export default function TreeDetail() {
           <div>
             <span className="muted small">Site · जगह</span>
             <strong><Link to={`/site/${tree.site_id}`}>🏞️ {tree.site_name}</Link></strong>
+          </div>
+        )}
+        {treeLocation(tree) && (
+          <div>
+            <span className="muted small">Position · जगह में स्थान</span>
+            <strong>🧱 {treeLocation(tree)}</strong>
           </div>
         )}
         <div><span className="muted small">Latitude</span><strong>{tree.lat ?? '—'}</strong></div>

@@ -60,11 +60,13 @@ db.exec(`
   );
 `)
 
-// Migration: older databases have a trees table without site_id
+// Migrations: older databases miss newer tree columns
 const treeCols = db.prepare(`PRAGMA table_info(trees)`).all()
-if (!treeCols.some(c => c.name === 'site_id')) {
-  db.exec(`ALTER TABLE trees ADD COLUMN site_id INTEGER REFERENCES sites(id)`)
-}
+const hasCol = (name) => treeCols.some(c => c.name === name)
+if (!hasCol('site_id')) db.exec(`ALTER TABLE trees ADD COLUMN site_id INTEGER REFERENCES sites(id)`)
+if (!hasCol('block')) db.exec(`ALTER TABLE trees ADD COLUMN block TEXT`)
+if (!hasCol('row_no')) db.exec(`ALTER TABLE trees ADD COLUMN row_no INTEGER`)
+if (!hasCol('pos')) db.exec(`ALTER TABLE trees ADD COLUMN pos INTEGER`)
 db.exec(`CREATE INDEX IF NOT EXISTS idx_trees_site ON trees(site_id)`)
 
 export function maxTreeNumber() {
