@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getJSON, STATUS } from '../api.js'
 import TreeCard from '../components/TreeCard.jsx'
+import { useLang } from '../i18n.jsx'
 
 export default function TreesList() {
+  const { t } = useLang()
   const [params, setParams] = useSearchParams()
   const [trees, setTrees] = useState(null)
   const search = params.get('search') || ''
@@ -26,22 +28,22 @@ export default function TreesList() {
 
   return (
     <div className="page">
-      <h2>All Trees · सभी पेड़ {trees ? `(${trees.length})` : ''}</h2>
+      <h2>{t('all_trees')} {trees ? `(${trees.length})` : ''}</h2>
       {site && trees?.length > 0 && (
         <div className="card small" style={{ padding: '10px 14px' }}>
-          🏞️ Site filter: <strong>{trees[0].site_name || `#${site}`}</strong>
+          🏞️ {t('site_filter')}: <strong>{trees[0].site_name || `#${site}`}</strong>
           {' · '}
-          <a href="#" onClick={(e) => { e.preventDefault(); setParam('site', '') }}>Clear</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setParam('site', '') }}>{t('clear')}</a>
         </div>
       )}
       <input
         className="search"
-        placeholder="🔍 Search by ID, species, planter…"
+        placeholder={t('search_placeholder')}
         value={search}
         onChange={(e) => setParam('search', e.target.value)}
       />
       <div className="chips">
-        <button className={'chip' + (!status ? ' active' : '')} onClick={() => setParam('status', '')}>All</button>
+        <button className={'chip' + (!status ? ' active' : '')} onClick={() => setParam('status', '')}>{t('all')}</button>
         {Object.entries(STATUS).map(([key, s]) => (
           <button
             key={key}
@@ -49,17 +51,17 @@ export default function TreesList() {
             style={status === key ? { background: s.color, borderColor: s.color } : {}}
             onClick={() => setParam('status', key)}
           >
-            {s.emoji} {s.label}
+            {s.emoji} {t('status_' + key)}
           </button>
         ))}
       </div>
 
-      {!trees && <div className="loading">Loading…</div>}
+      {!trees && <div className="loading">{t('loading')}</div>}
       {trees && trees.length === 0 && (
-        <div className="card empty">No trees found. Tap ➕ to add your first tree! 🌱</div>
+        <div className="card empty">{t('no_trees_found')}</div>
       )}
       <div className="tree-grid">
-        {trees?.map(t => <TreeCard key={t.id} tree={t} />)}
+        {trees?.map(tr => <TreeCard key={tr.id} tree={tr} />)}
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLang } from '../i18n.jsx'
 
 // Shrinks phone photos (~4MB) to app-sized JPEGs (~300KB) before upload,
 // so the 1GB server disk holds thousands of photos instead of ~250.
@@ -32,6 +33,7 @@ async function compress(file) {
 
 // Camera/gallery photo picker with preview. On mobile, capture opens the back camera.
 export default function PhotoInput({ onChange }) {
+  const { t } = useLang()
   const [preview, setPreview] = useState(null)
 
   async function handleFile(e) {
@@ -46,7 +48,7 @@ export default function PhotoInput({ onChange }) {
     <label className="photo-input">
       {preview
         ? <img src={preview} alt="Selected" />
-        : <div className="photo-input-empty">📷<span>Tap to take photo / फोटो लें</span></div>}
+        : <div className="photo-input-empty">📷<span>{t('photo_tap')}</span></div>}
       <input type="file" accept="image/*" capture="environment" onChange={handleFile} hidden />
     </label>
   )

@@ -4,8 +4,10 @@ import QRCode from 'qrcode'
 import { getJSON, fmtDate, fmtDateTime, statusInfo, treeLocation } from '../api.js'
 import StatusBadge from '../components/StatusBadge.jsx'
 import LeafletMap from '../components/LeafletMap.jsx'
+import { useLang } from '../i18n.jsx'
 
 export default function TreeDetail() {
+  const { t } = useLang()
   const { id } = useParams()
   const navigate = useNavigate()
   const [tree, setTree] = useState(null)
@@ -28,9 +30,7 @@ export default function TreeDetail() {
   }, [tree])
 
   if (error) return <div className="page"><div className="error card">{error}</div></div>
-  if (!tree) return <div className="loading">Loading…</div>
-
-  const s = statusInfo(tree.status)
+  if (!tree) return <div className="loading">{t('loading')}</div>
 
   return (
     <div className="page">
@@ -45,31 +45,31 @@ export default function TreeDetail() {
       </div>
 
       <div className="row gap">
-        <Link to={`/tree/${tree.id}/update`} className="btn btn-primary grow">📝 Add Progress Update</Link>
+        <Link to={`/tree/${tree.id}/update`} className="btn btn-primary grow">📝 {t('add_progress_update')}</Link>
       </div>
 
       <div className="card info-grid">
-        <div><span className="muted small">Status</span><StatusBadge status={tree.status} large /></div>
-        <div><span className="muted small">Height · ऊँचाई</span><strong>{tree.height_cm ? `${tree.height_cm} cm` : '—'}</strong></div>
-        <div><span className="muted small">Planted on · लगाया गया</span><strong>{fmtDate(tree.planted_date)}</strong></div>
-        <div><span className="muted small">Planted by · किसने लगाया</span><strong>{tree.planted_by || '—'}</strong></div>
+        <div><span className="muted small">{t('status')}</span><StatusBadge status={tree.status} large /></div>
+        <div><span className="muted small">{t('height')}</span><strong>{tree.height_cm ? `${tree.height_cm} cm` : '—'}</strong></div>
+        <div><span className="muted small">{t('planted_on')}</span><strong>{fmtDate(tree.planted_date)}</strong></div>
+        <div><span className="muted small">{t('planted_by')}</span><strong>{tree.planted_by || '—'}</strong></div>
         {tree.site_name && (
           <div>
-            <span className="muted small">Site · जगह</span>
+            <span className="muted small">{t('site')}</span>
             <strong><Link to={`/site/${tree.site_id}`}>🏞️ {tree.site_name}</Link></strong>
           </div>
         )}
         {treeLocation(tree) && (
           <div>
-            <span className="muted small">Position · जगह में स्थान</span>
+            <span className="muted small">{t('position')}</span>
             <strong>🧱 {treeLocation(tree)}</strong>
           </div>
         )}
-        <div><span className="muted small">Latitude</span><strong>{tree.lat ?? '—'}</strong></div>
-        <div><span className="muted small">Longitude</span><strong>{tree.lng ?? '—'}</strong></div>
+        <div><span className="muted small">{t('latitude')}</span><strong>{tree.lat ?? '—'}</strong></div>
+        <div><span className="muted small">{t('longitude')}</span><strong>{tree.lng ?? '—'}</strong></div>
       </div>
 
-      {tree.notes && <div className="card"><span className="muted small">Notes</span><p>{tree.notes}</p></div>}
+      {tree.notes && <div className="card"><span className="muted small">{t('notes')}</span><p>{tree.notes}</p></div>}
 
       {tree.lat != null && tree.lng != null && (
         <div className="card pad0">
@@ -78,7 +78,7 @@ export default function TreeDetail() {
             className="btn btn-outline mlink"
             href={`https://www.google.com/maps?q=${tree.lat},${tree.lng}`}
             target="_blank" rel="noreferrer"
-          >🧭 Navigate with Google Maps</a>
+          >🧭 {t('navigate_gmaps')}</a>
         </div>
       )}
 
@@ -86,17 +86,17 @@ export default function TreeDetail() {
         <div className="card qr-card">
           <img src={qr} alt={`QR code for ${tree.id}`} />
           <div>
-            <strong>Tree QR Code</strong>
-            <p className="muted small">Print &amp; tie this tag to the tree. Scanning opens this page instantly. · इसे प्रिंट करके पेड़ पर बांधें — स्कैन करते ही पेड़ की पूरी जानकारी खुलेगी।</p>
-            <a className="btn btn-outline" href={qr} download={`${tree.id}-qr.png`}>⬇️ Download QR</a>
+            <strong>{t('tree_qr')}</strong>
+            <p className="muted small">{t('qr_hint')}</p>
+            <a className="btn btn-outline" href={qr} download={`${tree.id}-qr.png`}>⬇️ {t('download_qr')}</a>
           </div>
         </div>
       )}
 
       <section>
-        <h2>Growth timeline · विकास यात्रा ({tree.updates.length})</h2>
+        <h2>{t('growth_timeline')} ({tree.updates.length})</h2>
         {tree.updates.length === 0 && (
-          <div className="card empty">No updates yet — add the first one! 🌱</div>
+          <div className="card empty">{t('no_tree_updates')}</div>
         )}
         <div className="timeline">
           {tree.updates.map(u => (
@@ -122,11 +122,11 @@ export default function TreeDetail() {
       <button
         className="btn btn-danger"
         onClick={async () => {
-          if (!confirm(`Delete ${tree.id} (${tree.species})? This cannot be undone.`)) return
+          if (!confirm(`${tree.id} (${tree.species}) — ${t('delete_confirm')}`)) return
           await fetch('/api/trees/' + tree.id, { method: 'DELETE' })
           navigate('/trees')
         }}
-      >🗑️ Delete tree</button>
+      >🗑️ {t('delete_tree')}</button>
     </div>
   )
 }

@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getJSON, postJSON } from '../api.js'
 import GpsField from '../components/GpsField.jsx'
+import { useLang } from '../i18n.jsx'
 
 export default function Sites() {
+  const { t } = useLang()
   const [sites, setSites] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [gps, setGps] = useState({ lat: '', lng: '' })
@@ -37,45 +39,43 @@ export default function Sites() {
   return (
     <div className="page">
       <div className="row spread">
-        <h2>🏞️ Plantation Sites · जगहें {sites ? `(${sites.length})` : ''}</h2>
+        <h2>🏞️ {t('sites_title')} {sites ? `(${sites.length})` : ''}</h2>
         <button className="btn btn-primary" onClick={() => setShowForm(s => !s)}>
-          {showForm ? 'Cancel' : '➕ New Site'}
+          {showForm ? t('cancel') : '➕ ' + t('new_site')}
         </button>
       </div>
 
       {showForm && (
         <form onSubmit={submit} className="form card">
-          <label>Site name * · जगह का नाम
-            <input name="name" required placeholder="e.g. Rampur Land, School Campus" />
+          <label>{t('site_name')} *
+            <input name="name" required placeholder="Rampur Land, School Campus…" />
           </label>
-          <label>Location / address · पता
+          <label>{t('site_location')}
             <input name="location" placeholder="Village, tehsil, district…" />
           </label>
           <div className="row gap">
-            <label className="grow">Trees planted (target) · कितने पेड़
+            <label className="grow">{t('target_trees')}
               <input name="target_count" type="number" min="1" placeholder="2000" />
             </label>
-            <label className="grow">Plantation date · तारीख
+            <label className="grow">{t('plantation_date')}
               <input name="planted_date" type="date" />
             </label>
           </div>
-          <label>Site location (GPS)</label>
+          <label>{t('site_gps')}</label>
           <GpsField lat={gps.lat} lng={gps.lng} onChange={setGps} />
-          <label>Notes · टिप्पणी
-            <textarea name="notes" rows="2" placeholder="Soil, water source, caretaker…" />
+          <label>{t('notes')}
+            <textarea name="notes" rows="2" />
           </label>
           {error && <div className="error">{error}</div>}
           <button className="btn btn-primary" disabled={busy}>
-            {busy ? 'Saving…' : '✅ Create Site'}
+            {busy ? t('saving') : '✅ ' + t('create_site')}
           </button>
         </form>
       )}
 
-      {!sites && <div className="loading">Loading…</div>}
+      {!sites && <div className="loading">{t('loading')}</div>}
       {sites && sites.length === 0 && !showForm && (
-        <div className="card empty">
-          Koi site nahi hai abhi. "New Site" dabao aur apni pehli plantation land banao! 🏞️
-        </div>
+        <div className="card empty">{t('no_sites')}</div>
       )}
 
       {sites?.map(s => {
@@ -91,7 +91,7 @@ export default function Sites() {
             {s.location && <div className="muted small">📍 {s.location}</div>}
             <div className="progress"><div style={{ width: pct + '%' }} /></div>
             <div className="row spread small muted">
-              <span>{pct}% registered</span>
+              <span>{pct}% {t('registered')}</span>
               <span>
                 🌿 {s.healthy || 0} · ⚠️ {s.needs_attention || 0} · 🍂 {s.sick || 0} · 🪵 {s.dead || 0}
               </span>

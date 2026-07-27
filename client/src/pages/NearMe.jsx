@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getJSON, statusInfo, treeLocation } from '../api.js'
 import StatusBadge from '../components/StatusBadge.jsx'
+import { useLang } from '../i18n.jsx'
 
 export default function NearMe() {
+  const { t } = useLang()
   const [state, setState] = useState('idle') // idle | locating | done | error
   const [error, setError] = useState(null)
   const [trees, setTrees] = useState([])
@@ -11,7 +13,7 @@ export default function NearMe() {
   const [radius, setRadius] = useState(150)
 
   function locate(r = radius) {
-    if (!navigator.geolocation) { setState('error'); setError('GPS not supported on this device'); return }
+    if (!navigator.geolocation) { setState('error'); setError(t('gps_not_supported')); return }
     setState('locating'); setError(null)
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
@@ -31,13 +33,11 @@ export default function NearMe() {
 
   return (
     <div className="page">
-      <h2>📍 Near Me · मेरे पास के पेड़</h2>
+      <h2>📍 {t('nav_near')}</h2>
       <div className="card" style={{ textAlign: 'center' }}>
-        <p className="muted small">
-          Ped ke paas khade hoke button dabao — aas-paas ke registered trees distance ke hisaab se dikhenge.
-        </p>
+        <p className="muted small">{t('near_hint')}</p>
         <button className="btn btn-primary" onClick={() => locate()} disabled={state === 'locating'}>
-          {state === 'locating' ? '📡 Locating…' : state === 'done' ? '🔄 Refresh location' : '📍 Find trees near me'}
+          {state === 'locating' ? '📡 ' + t('locating') : state === 'done' ? '🔄 ' + t('refresh_location') : '📍 ' + t('find_near')}
         </button>
         <div className="chips" style={{ justifyContent: 'center', marginTop: 10 }}>
           {[50, 150, 500].map(r => (
@@ -49,33 +49,30 @@ export default function NearMe() {
           ))}
         </div>
         {accuracy != null && state === 'done' && (
-          <div className="muted small" style={{ marginTop: 8 }}>GPS accuracy: ±{accuracy} m</div>
+          <div className="muted small" style={{ marginTop: 8 }}>{t('gps_accuracy')}: ±{accuracy} m</div>
         )}
       </div>
 
       {state === 'error' && <div className="error card">{error}</div>}
 
       {state === 'done' && trees.length === 0 && (
-        <div className="card empty">
-          {radius} m ke andar koi registered tree nahi mila.
-          Radius badhao, ya is ped ko pehle register/GPS-update karo. 🌱
-        </div>
+        <div className="card empty">{t('near_empty')}</div>
       )}
 
-      {trees.map((t, i) => (
-        <Link to={`/tree/${t.id}`} key={t.id} className="card near-row">
-          <div className="near-rank" style={{ background: statusInfo(t.status).color }}>
+      {trees.map((tr, i) => (
+        <Link to={`/tree/${tr.id}`} key={tr.id} className="card near-row">
+          <div className="near-rank" style={{ background: statusInfo(tr.status).color }}>
             {i === 0 ? '🎯' : i + 1}
           </div>
           <div className="grow">
             <div className="row spread">
-              <strong>{t.species} <code>{t.id}</code></strong>
-              <StatusBadge status={t.status} />
+              <strong>{tr.species} <code>{tr.id}</code></strong>
+              <StatusBadge status={tr.status} />
             </div>
             <div className="muted small">
-              {treeLocation(t) ? `🧱 ${treeLocation(t)} · ` : ''}
-              {t.site_name ? `🏞️ ${t.site_name} · ` : ''}
-              📏 <strong>{t.distance_m} m door</strong>
+              {treeLocation(tr) ? `🧱 ${treeLocation(tr)} · ` : ''}
+              {tr.site_name ? `🏞️ ${tr.site_name} · ` : ''}
+              📏 <strong>{tr.distance_m} m {t('away')}</strong>
             </div>
           </div>
         </Link>

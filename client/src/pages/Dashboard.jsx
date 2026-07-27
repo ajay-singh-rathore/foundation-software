@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getJSON, STATUS, fmtDateTime } from '../api.js'
 import StatusBadge from '../components/StatusBadge.jsx'
+import { useLang } from '../i18n.jsx'
 
 export default function Dashboard() {
+  const { t } = useLang()
   const [stats, setStats] = useState(null)
   const [error, setError] = useState(null)
 
   useEffect(() => { getJSON('/api/stats').then(setStats).catch(e => setError(e.message)) }, [])
 
   if (error) return <div className="error card">{error}</div>
-  if (!stats) return <div className="loading">Loading…</div>
+  if (!stats) return <div className="loading">{t('loading')}</div>
 
-  const healthy = stats.byStatus.healthy || 0
   const surviving = stats.total - (stats.byStatus.dead || 0)
   const survivalRate = stats.total ? Math.round((surviving / stats.total) * 100) : 0
 
@@ -21,11 +22,11 @@ export default function Dashboard() {
       <div className="hero card">
         <div>
           <h1>🌳 {stats.total}</h1>
-          <p>Trees planted · पेड़ लगाए गए</p>
+          <p>{t('trees_planted')}</p>
         </div>
         <div className="hero-rate">
           <strong>{survivalRate}%</strong>
-          <span>Survival rate</span>
+          <span>{t('survival_rate')}</span>
         </div>
       </div>
 
@@ -34,20 +35,20 @@ export default function Dashboard() {
           <Link key={key} to={`/trees?status=${key}`} className="stat-card card" style={{ borderColor: s.color }}>
             <span className="stat-emoji">{s.emoji}</span>
             <strong style={{ color: s.color }}>{stats.byStatus[key] || 0}</strong>
-            <span className="muted small">{s.label} · {s.hindi}</span>
+            <span className="muted small">{t('status_' + key)}</span>
           </Link>
         ))}
       </div>
 
       <div className="row gap">
-        <Link to="/trees/new" className="btn btn-primary grow">➕ Add New Tree</Link>
-        <Link to="/map" className="btn btn-outline grow">🗺️ View Map</Link>
+        <Link to="/trees/new" className="btn btn-primary grow">➕ {t('add_new_tree')}</Link>
+        <Link to="/map" className="btn btn-outline grow">🗺️ {t('view_map')}</Link>
       </div>
 
       <section>
-        <h2>Recent activity · हाल की गतिविधि</h2>
+        <h2>{t('recent_activity')}</h2>
         {stats.recent.length === 0 && (
-          <div className="card empty">No updates yet. Visit a tree and add its first progress update! 🌱</div>
+          <div className="card empty">{t('no_updates_yet')}</div>
         )}
         {stats.recent.map(u => (
           <Link to={`/tree/${u.tree_id}`} key={u.id} className="card activity">
